@@ -137,12 +137,12 @@ if badinput: #if any input was not ok, quit
 
 
 def processContent(titleid, key):
-
-    if(len(arguments.cianame) is 0) or (arguments.cianame is None):
+    if(arguments.cianame is None) or (len(arguments.specific_titles) != 1):
+        if (len(arguments.specific_titles) != 1):
+            print 'Will not set CIA names as there are multiple title ids provided'
         cianame = titleid
     else:
         cianame = arguments.cianame
-
     if(arguments.ticketsonly):
         if not os.path.exists('tickets'):
             os.makedirs(os.path.join('tickets'))
