@@ -85,6 +85,7 @@ parser.add_argument('-nodownload', action='store_false', default=True, dest='dow
 parser.add_argument('-nobuild', action='store_false', default=True, dest='build', help='Turn OFF generation of CIA files, titles will be downloaded only.')
 parser.add_argument('-retry', type=int, default=4, dest='retry_count', choices=range(0, 10), help='How many times a file download will be attempted')
 parser.add_argument('-title', nargs='+', dest='specific_titles', help='Give TitleIDs to be specifically downloaded')
+parser.add_argument('-cianame', action='store', dest='cianame', help='Name of cia output')
 
 parser.add_argument('-key', action='store', dest='key', help='Encrypted Title Key for the Title ID')
 
@@ -136,6 +137,11 @@ if badinput: #if any input was not ok, quit
 
 
 def processContent(titleid, key):
+
+    if(len(arguments.cianame) is 0) or (arguments.cianame is None):
+        cianame = titleid
+    else:
+        cianame = arguments.cianame
 
     if(arguments.ticketsonly):
         if not os.path.exists('tickets'):
@@ -231,9 +237,9 @@ def processContent(titleid, key):
                 if(arguments.build):
                     if not os.path.exists(ciadir):
                         os.makedirs(ciadir)
-                    makecommand = ' ' + os.path.join(rawdir) + ' ' + os.path.join(ciadir, titleid) + '.cia'
+                    makecommand = ' ' + os.path.join(rawdir) + ' ' + os.path.join(ciadir, cianame) + '.cia'
                     os.system(execname + makecommand)
-                    if(os.path.isfile(os.path.join(ciadir, titleid) + '.cia')):
+                    if(os.path.isfile(os.path.join(ciadir, cianame) + '.cia')):
                         print 'CIA created ok!'
                     else:
                         print 'CIA not created...'
