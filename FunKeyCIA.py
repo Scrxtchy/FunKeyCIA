@@ -237,7 +237,7 @@ def processContent(titleid, key):
                 if(arguments.build):
                     if not os.path.exists(ciadir):
                         os.makedirs(ciadir)
-                    makecommand = ' ' + os.path.join(rawdir) + ' ' + os.path.join(ciadir, cianame) + '.cia'
+                    makecommand = ' ' + os.path.join(rawdir) + ' "' + os.path.join(ciadir, cianame) + '.cia"'
                     os.system(execname + makecommand)
                     if(os.path.isfile(os.path.join(ciadir, cianame) + '.cia')):
                         print 'CIA created ok!'
