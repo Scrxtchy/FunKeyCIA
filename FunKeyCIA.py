@@ -85,9 +85,12 @@ parser.add_argument('-nodownload', action='store_false', default=True, dest='dow
 parser.add_argument('-nobuild', action='store_false', default=True, dest='build', help='Turn OFF generation of CIA files, titles will be downloaded only.')
 parser.add_argument('-retry', type=int, default=4, dest='retry_count', choices=range(0, 10), help='How many times a file download will be attempted')
 parser.add_argument('-title', nargs='+', dest='specific_titles', help='Give TitleIDs to be specifically downloaded')
-parser.add_argument('-cianame', action='store', dest='cianame', help='Name of cia output')
 
 parser.add_argument('-key', action='store', dest='key', help='Encrypted Title Key for the Title ID')
+parser.add_argument('-cianame', action='store', dest='cianame', help='Name of cia output')
+parser.add_argument('-type', action='store', dest='dlType', help='Type of content (used for storage)')
+parser.add_argument('-reg', action='store', dest='region', help='Region of content (used for storage)')
+parser.add_argument('-pserial', action='store', dest='pserial', help='Physical Serial of CIA (used for strage?)')
 
 parser.add_argument('-ticketsonly', action='store_true', default=False, dest='ticketsonly', help='Create only tickets, out put them all in one folder')
 parser.add_argument('-keyfile', action='store_true', default=False, dest='localkeyfile', help='encTitleKeys.bin file as input')
@@ -137,22 +140,27 @@ if badinput: #if any input was not ok, quit
 
 
 def processContent(titleid, key):
+    
+    if
+
+
     if(arguments.cianame is None) or (len(arguments.specific_titles) != 1):
         if (len(arguments.specific_titles) != 1):
             print 'Will not set CIA names as there are multiple title ids provided'
-        cianame = titleid
+        cianame = titleid 
     else:
         cianame = arguments.cianame
+            
     if(arguments.ticketsonly):
         if not os.path.exists('tickets'):
             os.makedirs(os.path.join('tickets'))
     else:
         if(arguments.output_dir is not None):
             rawdir = os.path.join(arguments.output_dir, 'raw', titleid)
-            ciadir = os.path.join(arguments.output_dir, 'cia', titleid)
+            ciadir = os.path.join(arguments.output_dir, 'cia', cianame)
         else:
-            rawdir = os.path.join('raw', titleid)
-            ciadir = os.path.join('cia', titleid)
+            rawdir = os.path.join('raw', arguments.region, arguments.dlType, titleid)
+            ciadir = os.path.join('cia', arguments.region, arguments.dlType)
 
         if not os.path.exists(rawdir):
             os.makedirs(os.path.join(rawdir))
@@ -237,7 +245,8 @@ def processContent(titleid, key):
                 if(arguments.build):
                     if not os.path.exists(ciadir):
                         os.makedirs(ciadir)
-                    makecommand = ' ' + os.path.join(rawdir) + ' "' + os.path.join(ciadir, cianame) + '.cia"'
+                    makecommand = ' ' + os.path.join(rawdir) + ' "' + ciadir + arguments.cianame + ' -- ' + titleid + ' -- ' + arguments.pserial + '.cia"'
+                    print makecommand
                     os.system(execname + makecommand)
                     if(os.path.isfile(os.path.join(ciadir, cianame) + '.cia')):
                         print 'CIA created ok!'
